@@ -12,39 +12,7 @@ const k = kaboom({
 
 let w = width(), h = height()
 
-// loadRoot("/path/to/") // minimizes duplication
-// loadSprite("dino1", "dino1.png")
-// loadSprite("dino2", "dino2.png")
-
-/* Customize what we load from a spritesheet
-loadSprite("dino1", "path/to/spritesheet.png", {
-  sliceX: 24, // Number of cols
-  sliceY: 1, // Number of rows
-  anims: {
-    main: {
-      from: 0, // Range of frames for main animation
-      to: 23,
-    },
-    running: {
-      from: 24, // Range of frames for running animation
-      to: 47,
-    }
-  }
-}) */
-
 scene("title", () => {
-
-/*
-  const dino1 = add([sprite("dino1"), pos(0, 0), scale(4)])
-  const dino2 = add([sprite("dino2"), pos(100, 0), scale(4)])
-  const dino3 = add([sprite("dino3"), pos(200, 0), scale(4)])
-  const dino4 = add([sprite("dino4"), pos(300, 0), scale(4)])
-
-  dino1.play("main")
-  dino2.play("main")
-  dino3.play("main")
-  dino4.play("main")
-*/
 	add([text("gemm!", 128), origin("top"), color(0), pos(400, 14), "shadow"])
   add([text("gemm!", 128), origin("top"), pos(400, 10), , "title"])
 
@@ -96,12 +64,6 @@ scene("title", () => {
 	add([rect(185, 50), color(0), pos(246, 254), "shadow"])
   const startTrigger = add([rect(185, 50), pos(246, 250), "button"])
 
-/*
-	charInput((ch) => {
-		input = input.charAt(input.length-1) + ch // keep last 2 chars
-		console.log(input)
-	})
-*/
 })
 
 start("title")
