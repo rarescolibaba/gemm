@@ -35,3 +35,21 @@ loadSprite("dino1", "path/to/spritesheet.png", {
 		input = input.charAt(input.length-1) + ch // keep last 2 chars
 		console.log(input)
 	})
+
+// Maybe this will be useful later: console.log(obj.pos)
+{ x: 400,
+  y: 204,
+  clone: [Function],
+  add: [Function],
+  sub: [Function],
+  scale: [Function],
+  dist: [Function],
+  len: [Function],
+  unit: [Function],
+  normal: [Function],
+  dot: [Function],
+  angle: [Function],
+  lerp: [Function],
+  eq: [Function],
+  str: [Function] }
+// see also, math section: https://kaboomjs.com/#vec2
