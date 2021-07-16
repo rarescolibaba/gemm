@@ -2,7 +2,7 @@ loadRoot("/path/to/") // minimizes duplication
 loadSprite("dino1", "dino1.png")
 loadSprite("dino2", "dino2.png")
 
-/* Customize what we load from a spritesheet, outside of scenes */
+/* Customize what we load from a spritesheet */
 loadSprite("dino1", "path/to/spritesheet.png", {
   sliceX: 24, // Number of cols
   sliceY: 1, // Number of rows
