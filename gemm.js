@@ -14,6 +14,16 @@ const k = kaboom({
 const sOff = new vec2(0, z.y / 100)
 
 const rng = makeRng(Date.now());
+const dir = {
+	"up": new vec2(0, -1),
+	"down": new vec2(0, 1),
+	"left": new vec2(-1, 0),
+	"right": new vec2(1, 0),
+	"ul": new vec2(-0.707, -0.707),
+	"ur": new vec2(0.707, -0.707),
+	"dl": new vec2(-0.707, 0.707),
+	"dr": new vec2(0.707, 0.707)
+}
 let samples = {}
 
 /*
@@ -127,6 +137,10 @@ scene("mainmenu", () => {
 						from: 38,
 						to: 41,
 					},
+					run: {
+						from: 8,
+						to: 13,
+					},
 					// attacking animSpeed: 0.1
 					attack1: {
 						from: 42,
@@ -141,24 +155,68 @@ scene("mainmenu", () => {
 scene("level1", () => {
 	// Start with black screen
 	console.log("loaded \"first\"")
-
-	let endAttack = false
 	
+	add([rect(z.x, 30), pos(0, z.y-30), solid(), "floor"])
 	const runr = add([
     sprite("adventurer", {
         animSpeed: 0.25,
     }),
     pos(10, 10),
-    scale(4)
+    scale(4),
+		body({
+        // force of .jump()
+        jumpForce: 640,
+        // maximum fall velocity
+        maxVel: 2400,
+    })
   ])
 	runr.play("idleSword")
-	// TODO: Find a method for ending attack animation smoothly, then switching to idle animation when mouse is released
+
+	let playerSpeed = 420, attMod = 1, facingRight = true, running = false
+	const attacking = function() {return runr.curAnim().slice(0, -1) == "attack"}
+
+	// This is probably inefficient. Look for a better method to handle movement?
+	keyDown("a", () => {
+		if (!running && !attacking()) running = true, runr.animSpeed = 0.1, runr.play("run")
+		// correct sprite position
+		if (facingRight) {
+			facingRight = false
+			runr.use(scale(-runr.scale.x, runr.scale.y))
+			runr.move(runr.width*runr.scale.y*60, 0)
+		}
+		runr.move(dir.left.scale(playerSpeed * attMod))
+	})
+	keyDown("d", () => {
+		if (!running && !attacking()) running = true, runr.animSpeed = 0.1, runr.play("run")
+		// correct sprite position
+		if (!facingRight) {
+			facingRight = true
+			runr.use(scale(-runr.scale.x, runr.scale.y))
+			runr.move(-runr.width*runr.scale.y*60, 0)
+		}
+		runr.move(dir.right.scale(playerSpeed * attMod))
+	})
+	// Find a better method to end animations when keys are released
+	keyRelease("a", () => {
+		running = false
+		if (!attacking()) runr.animSpeed = 0.25, runr.play("idle"), attMod = 1
+	})
+	keyRelease("d", () => {
+		running = false
+		if (!attacking()) runr.animSpeed = 0.25, runr.play("idle"), attMod = 1
+	})
+	keyPress("space", () => {
+		// Implement jumping on surfaces, but not freely
+	})
 	mouseClick(() => {
-		if (runr.curAnim().slice(0, -1) !== "attack") runr.animSpeed = 0.1, runr.play("attack1")
 		// TODO: Find a method to setInterval only while the attack animation is playing
+		if (!attacking()) runr.animSpeed = 0.1, runr.play("attack1"), attMod = 0.2
 	})
 	mouseRelease(() => {
-		if (runr.curAnim().slice(0, -1) == "attack") runr.animSpeed = 0.25, runr.play("idleSword")
+		if (attacking()) {
+			if (running) runr.animSpeed = 0.1, runr.play("run"), attMod = 1
+			else runr.animSpeed = 0.25, runr.play("idle"), attMod = 1
+		}
 	})
 })
 
